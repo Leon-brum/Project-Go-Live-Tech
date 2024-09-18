@@ -1,0 +1,58 @@
+import { Request, Response, NextFunction } from 'express';
+import * as jwt from 'jsonwebtoken';
+import token from '../interfaces/IJwt'
+
+import 'dotenv';
+
+const JWT_SECRET = process.env.JWT_SECRET || 'jwt_secret';
+
+export default class userValidation {
+  static login(req: Request, res: Response, next: NextFunction): Response | void {
+    const login = req.body;
+    const reqKeys = ['user', 'password'];
+    const notFoundKey = reqKeys.find((key) => !(key in login));
+
+    if(notFoundKey) {
+      return res.status(400).json({ message: 'Todos os campos devem ser preenchidos!' })
+    }
+    if(!login.password || !login.user) {
+      return res.status(400).json({ message: 'Todos os campos devem ser preenchidos!' })
+    }
+    next()
+  }
+
+  static async token(
+    req: token,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> {
+    const { authorization } = req.headers;
+    if (!authorization) {
+      return res.status(401).json({ message: 'Token não encontrado!' });
+    }
+    try {
+      const emptyToken = authorization.replace('Bearer ', '');
+      const tokenValid = await jwt.verify(emptyToken, JWT_SECRET);
+      req.token = tokenValid as object;
+
+      return next();
+    } catch (error) {
+      return res.status(401).json({ message: 'O token deve ser válido!' });
+    }
+  }
+
+  static async create(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> {
+    const { user, password } = req.body;
+    if(!user || !password) {
+      return res.status(401).json({ message: 'Você deve preencher todos os campos!' })
+    }
+    if(password.length < 8) {
+      return res.status(401).json({ message: 'A senha deve ter pelo menos 8 caracteres!' })
+    }
+    return next();
+  }
+}

@@ -9,11 +9,11 @@ const {
 } = process.env;
 
 const config: Options = {
-  username: DB_USER,
+  username: DB_USER || 'root',
   password: 'password',
-  database: DB_NAME,
-  host: DB_HOST,
-  dialect: "mysql"
+  database: DB_NAME || 'go-live-tech-album',
+  host: DB_HOST || 'localhost', 
+  dialect: "mysql",
 };
 
 export = config;
