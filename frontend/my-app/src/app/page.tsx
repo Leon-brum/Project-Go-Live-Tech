@@ -1,7 +1,21 @@
+"use client";
+
 import { useEffect } from 'react';
-// import $ from 'jquery';
+import $ from 'jquery';
 
 export default function Home() {
+  useEffect(() => {
+    $.ajax({
+      url: 'http://localhost:3000/', // URL da API backend
+      method: 'GET',
+      success: (data) => {
+        console.log('Dados recebidos:', data);
+      },
+      error: (err) => {
+        console.error('Erro na requisição:', err);
+      },
+    });
+  }, []);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-200">

@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: .
+    container_name: frontend-container
+    ports:
+      - "3001:3001"  # Mapeando a porta 3001 da máquina local para a 3000 no container
+    volumes:
+      - .:/frontend
+      - /frontend/node_modules
+    environment:
+      - NODE_ENV=development
