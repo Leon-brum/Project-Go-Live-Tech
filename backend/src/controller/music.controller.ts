@@ -1,35 +1,36 @@
 import { Request, Response } from 'express';
-import AlbumService from '../services/album.service';
+import MusicService from '../services/music.service';
 import mapStatusHTTP from '../utils/MapStatusHTTP';
 
-export default class AlbumController {
-  constructor(private albumService = new AlbumService()) { }
+export default class MusicController {
+  constructor(private musicService = new MusicService()) { }
 
-  public async getAllAlbums(_req: Request, res: Response) {
-    const serviceResponse = await this.albumService.getAllAlbums();
+  public async getAllMusic(_req: Request, res: Response) {
+    const serviceResponse = await this.musicService.getAllMusic();
     return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data); 
   }
 
-  public async getByIdAlbum(req: Request, res: Response) {
+  public async getByIdMusic(req: Request, res: Response) {
     const { id } = req.params;
-    const serviceResponse = await this.albumService.getByIdAlbum(Number(id));
+    const serviceResponse = await this.musicService.getByIdMusic(Number(id));
     return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
   }
 
-  public async createAlbum(req: Request, res:Response):Promise<Response>{
+  public async createMusic(req: Request, res:Response):Promise<Response>{
     const {
       name,
       artist,
-      releaseDate
+      releaseDate,
+      albumId
     } = req.body
 
     try {
-        const serviceResponse = await this.albumService.createAlbum(
+        const serviceResponse = await this.musicService.createMusic(
         name,
         artist,
-        releaseDate
+        releaseDate,
+        albumId
       )
-      console.log(`controller ${serviceResponse}`);
       if (serviceResponse.status !== "CREATE"){
         return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data)
       }
@@ -39,12 +40,12 @@ export default class AlbumController {
     }
   }
 
-  public async updateAlbum(req: Request, res: Response): Promise<Response> {
+  public async updateMusic(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
     const updates = req.body;
 
     try {
-      const serviceResponse = await this.albumService.updateAlbum(Number(id), updates);
+      const serviceResponse = await this.musicService.updateMusic(Number(id), updates);
 
       if (serviceResponse.status !== "SUCCESSFUL") {
         return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
@@ -56,10 +57,10 @@ export default class AlbumController {
     }
   }
 
-  public async deleteAlbum (req: Request, res: Response):Promise<Response>{
+  public async deleteMusic(req: Request, res: Response):Promise<Response>{
     const { id } = req.params;
     try {
-      const serviceResponse = await this.albumService.deleteAlbum(Number(id));
+      const serviceResponse = await this.musicService.deleteMusic(Number(id));
 
       if (serviceResponse.status !== "SUCCESSFUL"){
         return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data)

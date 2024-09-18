@@ -17,6 +17,7 @@ InferCreationAttributes<Album>>{
 
   declare releaseDate: Date;
 
+  declare deletedAt: Date | null;
 }
 
 Album.init({
@@ -36,14 +37,20 @@ Album.init({
   },
   releaseDate: {
     allowNull: false,
-    type: DataTypes.DATEONLY
-  }
+    type: DataTypes.STRING,
+    field: 'release_date'
+  },
+  deletedAt: {
+    type: DataTypes.DATE,
+    field: 'deleted_at'
+  },
 
 }, {
   sequelize: db,
   underscored: true,
   modelName: 'albums',
-  timestamps: false,
+  timestamps: true,
+  paranoid: true
 });
 
 export default Album;

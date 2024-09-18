@@ -7,11 +7,11 @@ export interface IAlbumModel {
   createAlbum(
     name: IAlbum['name'],
     artist: IAlbum['artist'],
-    releaseDate: IAlbum['releaseDate'],
+    releaseDate: IAlbum['releaseDate']
   ): Promise<IAlbum>;
   updateAlbum(
     id: ID,
-    updates: Partial<IAlbum>
+    update: Partial<IAlbum>
 ): Promise<IAlbum | null>,
   deleteAlbum(id: ID): Promise<boolean>
 }

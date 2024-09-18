@@ -18,7 +18,9 @@ InferCreationAttributes<Music>>{
 
   declare releaseDate: Date;
 
-  declare albumId: number;
+  declare albumId: number | null;
+
+  declare deletedAt: Date | null;
 }
 
 Music.init({
@@ -42,16 +44,20 @@ Music.init({
     field: 'release_date'
   },
   albumId:{
-    allowNull:false,
+    allowNull:true,
     type: DataTypes.INTEGER,
     field: 'album_id'
-    
-  }
+  },
+  deletedAt: {
+    type: DataTypes.DATE,
+    field: 'deleted_at'
+  },
 }, {
   sequelize: db,
   underscored: true,
   modelName: 'musics',
-  timestamps: false,
+  timestamps: true,
+  paranoid: true
 });
 
 Music.belongsTo(Album, { foreignKey: 'albumId', as: 'album' });

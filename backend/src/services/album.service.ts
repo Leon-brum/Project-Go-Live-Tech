@@ -6,26 +6,22 @@ import { ServiceMessage, ServiceResponse } from '../utils/ServiceResponse';
 export default class AlbumService {
   constructor(private albumModel: IAlbumModel = new AlbumModel()) { }
 
-  public async getAllAlbums(): Promise<ServiceResponse<IAlbum[]>>{
+  public async getAllAlbums(): Promise<ServiceResponse<IAlbum[]>> {
     const albums = await this.albumModel.findAll();
-    return {status: 'SUCCESSFUL', data: albums};
+    return { status: 'SUCCESSFUL', data: albums };
   }
 
-  public async getByIdAlbum(id: number): Promise<ServiceResponse<IAlbum | null>> {
-    const album = await this.albumModel.findById(id)
-    if(!album) return {status: "NOT_FOUND", data: {
-      message: 'Album não encontrado!'
-    }}
-    return { status: "SUCCESSFUL", data: album }
+  public async getByIdAlbum(id: number): Promise<ServiceResponse<IAlbum | ServiceMessage>> {
+    const album = await this.albumModel.findById(id);
+    if (!album) {
+      return { status: "NOT_FOUND", data: { message: 'Album não encontrado!' } };
+    }
+    return { status: "SUCCESSFUL", data: album };
   }
 
   public async createAlbum(name: IAlbum['name'], artist: IAlbum['artist'], releaseDate: IAlbum['releaseDate']): Promise<ServiceResponse<IAlbum>> {
-    const weapon = await this.albumModel.createAlbum(
-      name,
-      artist,
-      releaseDate,
-    )
-    return { status: "CREATE", data: weapon }
+    const album = await this.albumModel.createAlbum(name, artist, releaseDate);
+    return { status: "CREATE", data: album };
   }
 
   public async updateAlbum(
@@ -33,17 +29,17 @@ export default class AlbumService {
     updates: Partial<IAlbum>
   ): Promise<ServiceResponse<IAlbum | ServiceMessage>> {
     const updatedAlbum = await this.albumModel.updateAlbum(id, updates);
-
     if (!updatedAlbum) {
-      return { status: "NOT_FOUND", data: { message: 'album não encontrado!' } };
+      return { status: "NOT_FOUND", data: { message: 'Álbum não encontrado!' } };
     }
-
     return { status: "SUCCESSFUL", data: updatedAlbum };
   }
 
-  public async deleteAlbum(id:number): Promise<ServiceResponse<ServiceMessage>>{
+  public async deleteAlbum(id: number): Promise<ServiceResponse<ServiceMessage>> {
     const exist = await this.albumModel.deleteAlbum(id);
-    if (!exist) return { status:'NOT_FOUND', data: { message: 'Id não encontrado' } }
-    return { status: "SUCCESSFUL", data: { message:'Album deletado!' } }
+    if (!exist) {
+      return { status: 'NOT_FOUND', data: { message: 'Id não encontrado' } };
+    }
+    return { status: "SUCCESSFUL", data: { message: 'Álbum deletado!' } };
   }
 }

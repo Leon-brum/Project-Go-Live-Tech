@@ -11,7 +11,7 @@ router.get('/:id', (req: Request, res: Response) => albumController.getByIdAlbum
 
 router.post('/', (req: Request, res: Response) => albumController.createAlbum(req, res));
 
-router.put('/:id', (req: Request, res: Response) => albumController.updateAlbum)
+router.put('/:id', (req: Request, res: Response) => albumController.updateAlbum(req, res));
 
 router.delete('/:id', (req: Request, res: Response) => albumController.deleteAlbum(req, res));
 
