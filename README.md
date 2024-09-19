@@ -152,3 +152,88 @@ Antes de começar, certifique-se de ter os seguintes itens instalados em sua má
     ```
 
 ---
+
+## Rotas do Backend
+
+### GET
+
+- **Listar todos os álbuns:**
+
+    ```
+    GET http://localhost:3000/album
+    ```
+
+- **Listar todas as músicas:**
+
+    ```
+    GET http://localhost:3000/music
+    ```
+
+- **Obter detalhes de um álbum específico:**
+
+    ```
+    GET http://localhost:3000/album/:id
+    ```
+
+- **Obter detalhes de uma música específica:**
+
+    ```
+    GET http://localhost:3000/music/:id
+    ```
+
+- **Listar músicas de um álbum específico:**
+
+    ```
+    GET http://localhost:3000/music/album/:albumId
+    ```
+
+---
+
+### POST
+
+- **Criar um novo álbum:**
+
+    ```
+    POST http://localhost:3000/album
+    ```
+
+- **Criar uma nova música:**
+
+    ```
+    POST http://localhost:3000/music
+    ```
+
+---
+
+### PUT
+
+- **Atualizar um álbum existente:**
+
+    ```
+    PUT http://localhost:3000/album/:id
+    ```
+
+- **Atualizar uma música existente:**
+
+    ```
+    PUT http://localhost:3000/music/:id
+    ```
+
+---
+
+### DELETE
+
+- **Soft delete de um álbum (não remove completamente do banco de dados):**
+
+    ```
+    DELETE http://localhost:3000/album/:id
+    ```
+
+- **Soft delete de uma música (não remove completamente do banco de dados):**
+
+    ```
+    DELETE http://localhost:3000/music/:id
+    ```
+
+> **Observação:** O `DELETE` realiza um **soft delete**, o que significa que os dados não são completamente excluídos do banco de dados. Eles permanecem armazenados, mas são marcados como removidos e não são mais retornados em consultas normais.
+
