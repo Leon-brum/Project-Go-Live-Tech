@@ -24,9 +24,9 @@ module.exports = {
         album_id: 4
       },
       {
-        name: 'Odisseia',
+        name: 'Tão Perto',
         artist: 'Lvcas',
-        release_date: '2023-09-12',
+        release_date: '2023-03-26',
         album_id: 4
       },
       {

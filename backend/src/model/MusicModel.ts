@@ -25,6 +25,29 @@ export default class MusicModel implements IMusicModel {
     }));
   }
 
+  async findByAlbumId(albumId: number): Promise<IMusic[]> {
+    if (isNaN(albumId)) {
+      throw new Error('ID do álbum deve ser um número válido.');
+    }
+    const musics = await this.model.findAll({
+      where: { albumId },
+      attributes: ['id', 'name', 'artist', 'releaseDate', 'albumId'],
+      include: [{
+        model: Album,
+        as: 'album',
+        attributes: { exclude: ['id'] }
+      }]
+    });
+
+    return musics.map(music => ({
+      id: music.id,
+      name: music.name,
+      artist: music.artist,
+      releaseDate: music.releaseDate,
+      albumId: music.albumId,
+    }));
+  }
+
   async findById(id: number): Promise<IMusic | null> {
     const music = await this.model.findByPk(id, {
       attributes: ['id', 'name', 'artist', 'releaseDate', 'albumId'],

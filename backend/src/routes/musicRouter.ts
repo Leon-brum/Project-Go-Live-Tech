@@ -9,6 +9,8 @@ router.get('/', (req: Request, res: Response) => musicController.getAllMusic(req
 
 router.get('/:id', (req: Request, res: Response) => musicController.getByIdMusic(req, res));
 
+router.get('/album/:id', (req: Request, res: Response) => musicController.getByAlbumId(req, res));
+
 router.post('/', (req: Request, res: Response) => musicController.createMusic(req, res));
 
 router.put('/:id', (req: Request, res: Response) => musicController.updateMusic(req, res));

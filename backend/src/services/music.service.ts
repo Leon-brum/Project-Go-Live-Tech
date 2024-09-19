@@ -22,6 +22,14 @@ export default class MusicService {
     return { status: "SUCCESSFUL", data: music };
   }
 
+  public async getByAlbumId(id: number): Promise<ServiceResponse<IMusic[] | ServiceMessage>> {
+    const musics = await this.musicModel.findByAlbumId(id);
+    if (musics.length === 0) {
+      return { status: "NOT_FOUND", data: { message: 'Nenhuma música encontrada para este álbum!' } };
+    }
+    return { status: "SUCCESSFUL", data: musics };
+  }
+
   public async createMusic(
     name: IMusic['name'],
     artist: IMusic['artist'],

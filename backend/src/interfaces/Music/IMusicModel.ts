@@ -4,6 +4,7 @@ import { ID } from '..';
 export interface IMusicModel {
   findAll(): Promise<IMusic[]>,
   findById(id: ID): Promise<IMusic | null>,
+  findByAlbumId(albumId: number): Promise<IMusic[]>,
   createMusic(
     name: IMusic['name'],
     artist: IMusic['artist'],

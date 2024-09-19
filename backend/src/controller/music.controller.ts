@@ -16,6 +16,12 @@ export default class MusicController {
     return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
   }
 
+  public async getByAlbumId(req: Request, res: Response) {
+    const { id } = req.params;
+    const serviceResponse = await this.musicService.getByAlbumId(Number(id));
+    return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
+  }
+
   public async createMusic(req: Request, res:Response):Promise<Response>{
     const {
       name,
