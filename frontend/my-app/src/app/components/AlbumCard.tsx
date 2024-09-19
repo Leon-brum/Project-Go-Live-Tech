@@ -1,10 +1,12 @@
 import React from 'react';
 
 interface AlbumCardProps {
+  id: number;
   name: string;
   artist: string;
   releaseDate: string;
   onClick: () => void;
+  onDelete: () => void;
 }
 
 export default function AlbumCard({ name, artist, releaseDate, onClick }: AlbumCardProps) {

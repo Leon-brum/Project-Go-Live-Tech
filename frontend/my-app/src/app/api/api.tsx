@@ -51,3 +51,75 @@ export const fetchAlbumMusics = (albumId: number, setMusics: any, setSelectedAlb
     },
   });
 };
+
+// Função para criar uma nova música
+export const createMusic = (musicData: { name: string; artist: string; releaseDate: string }, setNewMusic: any, setLoading: any) => {
+  setLoading(true);
+  $.ajax({
+    url: 'http://localhost:3000/music',
+    method: 'POST',
+    data: JSON.stringify(musicData),
+    contentType: 'application/json',
+    success: (newMusic) => {
+      setNewMusic((prevMusics: any) => [...prevMusics, newMusic]);
+      setLoading(false);
+    },
+    error: (err) => {
+      console.error('Erro ao criar música:', err);
+      setLoading(false);
+    },
+  });
+};
+
+// Função para criar um novo álbum
+export const createAlbum = (albumData: any, setAlbums: any, setLoading: any) => {
+  setLoading(true);
+  $.ajax({
+    url: 'http://localhost:3000/album',
+    method: 'POST',
+    data: JSON.stringify(albumData),
+    contentType: 'application/json',
+    success: (newAlbum) => {
+      setAlbums((prevAlbums: any) => [...prevAlbums, newAlbum]);
+      setLoading(false);
+    },
+    error: (err) => {
+      console.error('Erro ao criar álbum:', err);
+      setLoading(false);
+    },
+  });
+};
+
+export const deleteMusic = (id: number, setMusics: (data: any) => void, setSelectedAlbum: (albumId: number | null) => void, setLoading: (loading: boolean) => void) => {
+  setLoading(true);
+  $.ajax({
+    url: `http://localhost:3000/music/${id}`,
+    method: 'DELETE',
+    success: () => {
+      fetchMusics(setMusics, setSelectedAlbum, setLoading); // Atualiza a lista de músicas
+      setLoading(false);
+    },
+    error: (err) => {
+      console.error('Erro ao deletar música:', err);
+      setLoading(false);
+    },
+  });
+};
+
+// Função para deletar um álbum
+export const deleteAlbum = (id: number, setAlbums: (data: any) => void, setMusics: (data: any) => void, setSelectedAlbum: (albumId: number | null) => void, setLoading: (loading: boolean) => void) => {
+  setLoading(true);
+  $.ajax({
+    url: `http://localhost:3000/album/${id}`,
+    method: 'DELETE',
+    success: () => {
+      fetchAlbums(setAlbums, setMusics, setSelectedAlbum, setLoading); // Atualiza a lista de álbuns
+      setMusics([]); // Limpa a lista de músicas ao deletar um álbum
+      setLoading(false);
+    },
+    error: (err) => {
+      console.error('Erro ao deletar álbum:', err);
+      setLoading(false);
+    },
+  });
+};

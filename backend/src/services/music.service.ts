@@ -36,12 +36,11 @@ export default class MusicService {
     releaseDate: IMusic['releaseDate'],
     albumId: IMusic['albumId']
   ): Promise<ServiceResponse<IMusic | ServiceMessage>> {
-    if (albumId === null) {
-      return { status: "INVALID_DATA", data: { message: 'O ID do álbum não pode ser nulo!' } };
-    }
-    const albumExists = await this.albumModel.findById(albumId);
-    if (!albumExists) {
-      return { status: "NOT_FOUND", data: { message: 'Álbum não encontrado!' } };
+    if (albumId !== null) {
+      const albumExists = await this.albumModel.findById(albumId);
+      if (!albumExists) {
+        return { status: "NOT_FOUND", data: { message: 'Álbum não encontrado!' } };
+      }
     }
     const newMusic = await this.musicModel.createMusic(name, artist, releaseDate, albumId);
     return { status: "CREATE", data: newMusic };
