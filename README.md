@@ -4,6 +4,12 @@ Esse projeto é um site de álbum e música com um banco de dados próprio, onde
 
 ## Como Usar
 
+Antes de tudo é importante rodar dentro do diretorio backend:
+
+```bash
+npm install
+```
+
 ### Crie o arquivo .env
 
 Existe um arquivo chamado .env.example na raiz do projeto, use ele para criar o seu proprio.

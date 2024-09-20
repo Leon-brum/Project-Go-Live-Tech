@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . .
 
+RUN npm install react react-dom @types/react @types/react-dom
+
 EXPOSE 3001
 
 CMD [ "npm", "run", "dev" ]
