@@ -3,4 +3,5 @@ export default interface Music {
   name: string;
   artist: string;
   releaseDate: string;
+  albumId: number | null;
 }

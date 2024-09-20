@@ -123,3 +123,56 @@ export const deleteAlbum = (id: number, setAlbums: (data: any) => void, setMusic
     },
   });
 };
+
+export const updateMusic = (
+  id: number,
+  musicData: { name: string; artist: string; releaseDate: string },
+  setMusics: any,
+  setLoading: any
+) => {
+  setLoading(true);
+  $.ajax({
+    url: `http://localhost:3000/music/${id}`,
+    method: 'PUT',
+    data: JSON.stringify(musicData),
+    contentType: 'application/json',
+    success: (updatedMusic) => {
+      setMusics((prevMusics: any) =>
+        prevMusics.map((music: any) => (music.id === id ? updatedMusic : music))
+      );
+      setLoading(false);
+    },
+    error: (err) => {
+      console.error('Erro ao atualizar música:', err);
+      setLoading(false);
+    },
+  });
+};
+
+export const updateAlbum = (
+  id: number,
+  albumData: { 
+    name: string; 
+    artist: string;
+    releaseDate: string },
+  setAlbums: any,
+  setLoading: any
+) => {
+  setLoading(true);
+  $.ajax({
+    url: `http://localhost:3000/album/${id}`,
+    method: 'PUT',
+    data: JSON.stringify(albumData),
+    contentType: 'application/json',
+    success: (updatedAlbum) => {
+      setAlbums((prevAlbums: any) =>
+        prevAlbums.map((album: any) => (album.id === id ? updatedAlbum : album))
+      );
+      setLoading(false);
+    },
+    error: (err) => {
+      console.error('Erro ao atualizar álbum:', err);
+      setLoading(false);
+    },
+  });
+};

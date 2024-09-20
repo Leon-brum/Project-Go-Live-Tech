@@ -5,7 +5,8 @@ import ButtonGroup from './components/ButtonGroup';
 import { MusicCard } from './components/MusicCard';
 import AlbumCard from './components/AlbumCard';
 import Modal from './components/Modal';
-import { fetchMusics, fetchAlbums, fetchAlbumMusics, createMusic, createAlbum, deleteMusic, deleteAlbum } from './api/api';
+import ModalUpdate from './components/ModalUpdate'; // Importa o modal de edição
+import { fetchMusics, fetchAlbums, fetchAlbumMusics, createMusic, createAlbum, deleteMusic, deleteAlbum, updateMusic, updateAlbum } from './api/api'; // Adiciona funções de atualização
 import IMusic from './interfaces/IMusic';
 import IAlbum from './interfaces/IAlbum';
 
@@ -18,6 +19,12 @@ export default function Home() {
   // States to control modals
   const [isMusicModalOpen, setMusicModalOpen] = useState(false);
   const [isAlbumModalOpen, setAlbumModalOpen] = useState(false);
+
+  // States to control editing
+  const [isEditMusicModalOpen, setEditMusicModalOpen] = useState(false);
+  const [isEditAlbumModalOpen, setEditAlbumModalOpen] = useState(false);
+  const [selectedMusic, setSelectedMusic] = useState<IMusic | null>(null);
+  const [selectedAlbumForEdit, setSelectedAlbumForEdit] = useState<IAlbum | null>(null);
 
   // Função para criar uma nova música
   const handleCreateMusic = (musicData: { name: string; artist: string; releaseDate: string }) => {
@@ -39,6 +46,34 @@ export default function Home() {
   // Função para deletar um álbum
   const handleDeleteAlbum = (id: number) => {
     deleteAlbum(id, setAlbums, setMusics, setSelectedAlbum, setLoading);
+  };
+
+  // Função para abrir o modal de edição de música
+  const handleEditMusic = (music: IMusic) => {
+    setSelectedMusic(music);
+    setEditMusicModalOpen(true);
+  };
+
+  // Função para atualizar uma música
+  const handleUpdateMusic = (updatedMusic: { name: string; artist: string; releaseDate: string }) => {
+    if (selectedMusic) {
+      updateMusic(selectedMusic.id, updatedMusic, setMusics, setLoading);
+      setEditMusicModalOpen(false);
+    }
+  };
+
+  // Função para abrir o modal de edição de álbum
+  const handleEditAlbum = (album: IAlbum) => {
+    setSelectedAlbumForEdit(album);
+    setEditAlbumModalOpen(true);
+  };
+
+  // Função para atualizar um álbum
+  const handleUpdateAlbum = (updatedAlbum: { name: string; artist: string; releaseDate: string }) => {
+    if (selectedAlbumForEdit) {
+      updateAlbum(selectedAlbumForEdit.id, updatedAlbum, setAlbums, setLoading);
+      setEditAlbumModalOpen(false);
+    }
   };
 
   return (
@@ -78,6 +113,26 @@ export default function Home() {
         onSubmit={handleCreateAlbum}
       />
 
+      {/* Modal de Editar Música */}
+      {selectedMusic && (
+        <ModalUpdate
+          isOpen={isEditMusicModalOpen}
+          onClose={() => setEditMusicModalOpen(false)}
+          initialData={selectedMusic}
+          onUpdate={handleUpdateMusic}
+        />
+      )}
+
+      {/* Modal de Editar Álbum */}
+      {selectedAlbumForEdit && (
+        <ModalUpdate
+          isOpen={isEditAlbumModalOpen}
+          onClose={() => setEditAlbumModalOpen(false)}
+          initialData={selectedAlbumForEdit}
+          onUpdate={handleUpdateAlbum}
+        />
+      )}
+
       {musics.length > 0 && !selectedAlbum && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 w-full px-6">
           {musics.map((music) => (
@@ -87,7 +142,9 @@ export default function Home() {
               name={music.name}
               artist={music.artist}
               releaseDate={music.releaseDate}
+              albumId={music.albumId}
               onDelete={() => handleDeleteMusic(music.id)}
+              onEdit={() => handleEditMusic(music)} // Passa a música para ser editada
             />
           ))}
         </div>
@@ -104,10 +161,12 @@ export default function Home() {
               releaseDate={album.releaseDate}
               onClick={() => fetchAlbumMusics(album.id, setMusics, setSelectedAlbum, setLoading)}
               onDelete={() => handleDeleteAlbum(album.id)}
+              onEdit={() => handleEditAlbum(album)} // Passa o álbum para ser editado
             />
           ))}
         </div>
       )}
+
       {selectedAlbum && musics.length > 0 && (
         <div className="w-full px-6">
           <h2 className="text-3xl font-bold text-green-400 mb-4">Músicas do Álbum</h2>
@@ -118,14 +177,15 @@ export default function Home() {
                 key={music.id}
                 name={music.name}
                 artist={music.artist}
-                releaseDate={music.releaseDate} 
-                onDelete={() => handleDeleteAlbum(music.id)}
+                releaseDate={music.releaseDate}
+                albumId={music.albumId = null}
+                onDelete={() => handleEditAlbum(music)}
+                onEdit={() => handleEditMusic(music)} // Permitir edição das músicas do álbum
               />
             ))}
           </div>
         </div>
       )}
-
     </div>
   );
 }
