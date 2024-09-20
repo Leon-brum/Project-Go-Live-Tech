@@ -12,7 +12,7 @@ const config: Options = {
   username: DB_USER || 'root',
   password: 'password',
   database: DB_NAME || 'go-live-tech-album',
-  host: DB_HOST || 'localhost', 
+  host: DB_HOST || 'db', 
   dialect: "mysql",
 };
 
