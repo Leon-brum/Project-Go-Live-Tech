@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=${DB_HOST}
+      - JWT_SECRET=${JWT_SECRET}
+    volumes:
+      - ./backend:/backend
+    container_name: container-backend
+    restart: always
+    depends_on:
+      - db
+
+  db:
+    image: mysql
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    restart: always
+
+  db_reset:
+    image: node:16-alpine
+    working_dir: /backend
+    volumes:
+      - ./backend:/backend
+    depends_on:
+      - backend  # Aguarda o backend estar rodando
+    command: >
+      /bin/sh -c "
+      while ! nc -z backend 3000; do
+        echo 'Esperando backend...';
+        sleep 5;
+      done;
+      echo 'Backend rodando, executando reset de DB...';
+      npm run db:reset"
+
+  frontend:
+    build:
+      context: ./frontend/my-app
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./frontend/my-app:/my-app
+      - /my-app/node_modules
+    environment:
+      - NODE_ENV=development
+    container_name: frontend-container
+    depends_on:
+      - db_reset  # Espera o db_reset terminar antes de iniciar

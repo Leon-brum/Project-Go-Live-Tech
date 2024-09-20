@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import ButtonGroup from './components/ButtonGroup';
 import { MusicCard } from './components/MusicCard';
+import { MusicCardAlbum } from './components/MusicCardAlbum'; 
 import AlbumCard from './components/AlbumCard';
 import Modal from './components/Modal';
 import ModalUpdate from './components/ModalUpdate'; // Importa o modal de edição
@@ -73,6 +74,24 @@ export default function Home() {
     if (selectedAlbumForEdit) {
       updateAlbum(selectedAlbumForEdit.id, updatedAlbum, setAlbums, setLoading);
       setEditAlbumModalOpen(false);
+    }
+  };
+  // Função para remover uma música do álbum
+  const handleRemoveFromAlbum = (id: number) => {
+    const updatedMusic = musics.find((music) => music.id === id);
+    setMusics(prevMusics => prevMusics.filter(music => music.id !== id));
+
+    if (updatedMusic) {
+      // Usa um tipo de objeto mais dinâmico
+      const updatedMusicWithAlbumId = { ...updatedMusic, albumId: null } as any;
+      
+      // Atualiza o albumId para null no back-end
+      updateMusic(id, updatedMusicWithAlbumId, setMusics, setLoading);
+      setMusics((prevMusics) =>
+        prevMusics.map((music) =>
+          music.id === id ? { ...music, albumId: null } : music
+        )
+      );
     }
   };
 
@@ -172,15 +191,14 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-green-400 mb-4">Músicas do Álbum</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {musics.map((music) => (
-              <MusicCard
+              <MusicCardAlbum
                 id={music.id}
                 key={music.id}
                 name={music.name}
                 artist={music.artist}
                 releaseDate={music.releaseDate}
-                albumId={music.albumId = null}
-                onDelete={() => handleEditAlbum(music)}
-                onEdit={() => handleEditMusic(music)} // Permitir edição das músicas do álbum
+                onRemoveFromAlbum={() => handleRemoveFromAlbum(music.id)}
+                onEdit={() => handleEditMusic(music)}
               />
             ))}
           </div>

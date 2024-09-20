@@ -1,16 +1,15 @@
 import React from 'react';
 
-interface MusicCardProps {
+interface MusicCardAlbumProps {
   id: number;
   name: string;
   artist: string;
   releaseDate: string;
-  albumId: number | null;
-  onDelete: () => void;
+  onRemoveFromAlbum: () => void;
   onEdit: () => void;
 }
 
-export const MusicCard: React.FC<MusicCardProps> = ({ name, artist, releaseDate, albumId, onDelete, onEdit }) => {
+export const MusicCardAlbum: React.FC<MusicCardAlbumProps> = ({ name, artist, releaseDate, onRemoveFromAlbum, onEdit }) => {
   return (
     <div className="card bg-gray-800 text-gray-200 shadow-md rounded-lg overflow-hidden">
       <div className="h-40 mb-2">
@@ -26,10 +25,10 @@ export const MusicCard: React.FC<MusicCardProps> = ({ name, artist, releaseDate,
         <p>Data de Lançamento: {releaseDate}</p>
         <div className="mt-2">
           <button
-            onClick={onDelete}
+            onClick={onRemoveFromAlbum}
             className="bg-red-600 text-white py-1 px-4 rounded hover:bg-red-700"
           >
-            Deletar
+            Remover do Álbum
           </button>
           <button
             onClick={onEdit}
@@ -37,7 +36,6 @@ export const MusicCard: React.FC<MusicCardProps> = ({ name, artist, releaseDate,
           >
             Editar
           </button>
-
         </div>
       </div>
     </div>

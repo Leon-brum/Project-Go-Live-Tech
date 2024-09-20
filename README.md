@@ -1,239 +1,83 @@
-# Go Live Tech Project
+# Project Go-Live-Tech-Musics
 
-Este projeto é dividido em duas partes principais: **Backend** e **Frontend**. Abaixo estão as instruções para configurar e executar cada uma das partes.
+Esse projeto é um site de álbum e música com um banco de dados próprio, onde você será capaz de visualizar, criar, atualizar e deletar (soft delete) músicas e álbuns.
 
-## Sumário
+## Como Usar
 
-1. [Pré-requisitos](#pré-requisitos)
-2. [Instalação](#instalação)
-   - [Backend](#backend)
-   - [Frontend](#frontend)
-3. [Execução](#execução)
-   - [Backend](#executando-o-backend)
-   - [Frontend](#executando-o-frontend)
-4. [Comandos Úteis](#comandos-úteis)
+### Crie o arquivo .env
 
----
+Existe um arquivo chamado .env.example na raiz do projeto, use ele para criar o seu proprio.
 
-## Pré-requisitos
+### Docker
+(Sinta-se a vontade para mudar algumas config de docker-compose.yml)
 
-Antes de começar, certifique-se de ter os seguintes itens instalados em sua máquina:
 
-- **Node.js** (versão 14 ou superior)
-- **Docker** (incluindo Docker Compose)
-- **npm** ou **yarn**
+Esse projeto utiliza Docker. Para rodá-lo, basta executar o seguinte comando na raiz do projeto:
 
----
 
-## Instalação
+```bash
+docker-compose up --build
+```
 
-### Backend
+Aguarde o docker fazer todos os processos antes de abrir o frontend.
+Caso seu frontend nao mostre a api tente resetar apenas o container do frontend.
 
-1. Acesse o diretório do backend:
+### Estrutura do Projeto
 
-    ```bash
-    cd backend
-    ```
+- **Backend:** A pasta `backend` contém toda a lógica do servidor.
+- **Frontend:** A pasta `frontend/my-app` contém a interface do usuário.
 
-2. Instale as dependências:
+### Rotas da API
 
-    ```bash
-    npm install
-    ```
+#### GET
 
-3. Compile o código TypeScript:
+- `http://localhost:3000/album` - Obtém todos os álbuns.
+- `http://localhost:3000/music` - Obtém todas as músicas.
+- `http://localhost:3000/album/:id` - Obtém um álbum específico pelo ID.
+- `http://localhost:3000/music/:id` - Obtém uma música específica pelo ID.
+- `http://localhost:3000/music/album/:id` - Obtém todas as músicas de um álbum específico.
 
-    ```bash
-    npm run build
-    ```
+#### POST
 
-    ou, se preferir:
+- `http://localhost:3000/album` - Cria um novo álbum.
+- `http://localhost:3000/music` - Cria uma nova música.
 
-    ```bash
-    npx tsc
-    ```
+#### PUT
 
-4. Crie um arquivo `.env` na raiz do projeto com base no arquivo `.env.example`:
+- `http://localhost:3000/album/:id` - Atualiza um álbum específico pelo ID.
+- `http://localhost:3000/music/:id` - Atualiza uma música específica pelo ID.
 
-    ```bash
-    cp .env.example .env
-    ```
+#### DELETE (soft delete)
 
-5. Construa e inicie os containers Docker:
-
-    ```bash
-    docker-compose up --build
-    ```
-
-6. Certifique-se de que a porta configurada está disponível.
-
-7. Dentro do container, execute o seguinte comando para configurar o banco de dados (migrações e seeds):
-
-    ```bash
-    docker exec -it go-live-backend npm run db:reset
-    ```
-
----
+- `http://localhost:3000/album/:id` - Deleta um álbum específico pelo ID.
+- `http://localhost:3000/music/:id` - Deleta uma música específica pelo ID.
 
 ### Frontend
 
-1. Acesse o diretório do frontend:
+No lado do frontend, você pode visualizar todas essas rotas funcionando de forma fácil e intuitiva. A interface possui botões claramente rotulados para cada ação.
 
-    ```bash
-    cd frontend/my-app
-    ```
+## Tecnologias Utilizadas
 
-2. Instale as dependências:
+### Backend
 
-    ```bash
-    npm install
-    ```
+- JavaScript
+- TypeScript
+- Docker
+- MySQL
+- Express
+- Sequelize
 
-3. Construa e inicie os containers Docker:
+### Frontend
 
-    ```bash
-    docker-compose up --build
-    ```
+- TypeScript
+- Next.js
+- React
+- Tailwind CSS
 
-4. Após o container estar ativo, acesse o frontend no navegador na porta `3001` (verifique se a porta está livre).
+## Contribuição
 
----
+Sinta-se à vontade para contribuir com este projeto! Se você encontrar bugs ou tiver sugestões de melhorias, por favor, abra um issue ou faça um pull request.
 
-## Execução
+## Licença
 
-### Executando o Backend
-
-1. Verifique se as dependências estão instaladas e o `.env` está configurado.
-2. Use o Docker para levantar o ambiente:
-
-    ```bash
-    docker-compose up --build
-    ```
-
-3. Execute o comando para configurar o banco de dados:
-
-    ```bash
-    docker exec -it go-live-backend npm run db:reset
-    ```
-
----
-
-### Executando o Frontend
-
-1. Verifique se as dependências estão instaladas no diretório `frontend/my-app`.
-2. Levante o ambiente com Docker:
-
-    ```bash
-    docker-compose up --build
-    ```
-
-3. Acesse a aplicação no navegador pela porta `3001`.
-
----
-
-## Comandos Úteis
-
-- **Compilar o TypeScript do backend**:
-
-    ```bash
-    npm run build
-    ```
-
-- **Subir containers Docker**:
-
-    ```bash
-    docker-compose up --build
-    ```
-
-- **Resetar o banco de dados (migrações e seeds)**:
-
-    ```bash
-    docker exec -it go-live-backend npm run db:reset
-    ```
-
----
-
-## Rotas do Backend
-
-### GET
-
-- **Listar todos os álbuns:**
-
-    ```
-    GET http://localhost:3000/album
-    ```
-
-- **Listar todas as músicas:**
-
-    ```
-    GET http://localhost:3000/music
-    ```
-
-- **Obter detalhes de um álbum específico:**
-
-    ```
-    GET http://localhost:3000/album/:id
-    ```
-
-- **Obter detalhes de uma música específica:**
-
-    ```
-    GET http://localhost:3000/music/:id
-    ```
-
-- **Listar músicas de um álbum específico:**
-
-    ```
-    GET http://localhost:3000/music/album/:albumId
-    ```
-
----
-
-### POST
-
-- **Criar um novo álbum:**
-
-    ```
-    POST http://localhost:3000/album
-    ```
-
-- **Criar uma nova música:**
-
-    ```
-    POST http://localhost:3000/music
-    ```
-
----
-
-### PUT
-
-- **Atualizar um álbum existente:**
-
-    ```
-    PUT http://localhost:3000/album/:id
-    ```
-
-- **Atualizar uma música existente:**
-
-    ```
-    PUT http://localhost:3000/music/:id
-    ```
-
----
-
-### DELETE
-
-- **Soft delete de um álbum (não remove completamente do banco de dados):**
-
-    ```
-    DELETE http://localhost:3000/album/:id
-    ```
-
-- **Soft delete de uma música (não remove completamente do banco de dados):**
-
-    ```
-    DELETE http://localhost:3000/music/:id
-    ```
-
-> **Observação:** O `DELETE` realiza um **soft delete**, o que significa que os dados não são completamente excluídos do banco de dados. Eles permanecem armazenados, mas são marcados como removidos e não são mais retornados em consultas normais.
-
+Este projeto está sob a licença MIT.

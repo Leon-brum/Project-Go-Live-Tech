@@ -176,3 +176,30 @@ export const updateAlbum = (
     },
   });
 };
+
+export const removeMusicFromAlbum = (
+  id: number, 
+  setMusics: any, 
+  setLoading: any
+) => {
+  setLoading(true);
+  
+  $.ajax({
+    url: `http://localhost:3000/music/${id}`,
+    method: 'PUT',
+    data: JSON.stringify({ albumId: null }),
+    contentType: 'application/json',
+    success: (updatedMusic) => {
+      setMusics((prevMusics: any) =>
+        prevMusics.map((music: any) => 
+          music.id === id ? updatedMusic : music
+        )
+      );
+      setLoading(false);
+    },
+    error: (err) => {
+      console.error('Erro ao remover música do álbum:', err);
+      setLoading(false);
+    },
+  });
+};
